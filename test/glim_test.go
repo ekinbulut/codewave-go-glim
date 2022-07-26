@@ -19,3 +19,10 @@ func TestAdd(t *testing.T) {
 	b.Add(internal.Token{})
 	assert.Equal(t, 1, b.Size())
 }
+
+func TestRemoveOne(t *testing.T) {
+	b := internal.NewBucket(0)
+	b.Add(internal.Token{})
+	b.RemoveOne()
+	assert.Equal(t, 0, b.Size())
+}
