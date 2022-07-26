@@ -15,7 +15,7 @@ func TestBucketSize(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	b := internal.NewBucket(11)
+	b := internal.NewBucket(0)
 	b.Add(internal.Token{})
 	assert.Equal(t, 1, b.Size())
 }
