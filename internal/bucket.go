@@ -6,7 +6,7 @@ type Bucket struct {
 
 func NewBucket(quote int) *Bucket {
 
-	tokens := make([]Token, quote, quote)
+	tokens := make([]Token, quote)
 
 	return &Bucket{
 		Tokens: &tokens,
