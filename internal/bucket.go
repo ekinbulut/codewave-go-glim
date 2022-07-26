@@ -17,3 +17,12 @@ func NewBucket(quote int) *Bucket {
 func (b *Bucket) Size() int {
 	return len(*b.Tokens)
 }
+
+func (b *Bucket) Add(t Token) {
+	*b.Tokens = append(*b.Tokens, t)
+}
+
+// remove one token
+func (b *Bucket) RemoveOne() {
+	*b.Tokens = append((*b.Tokens)[:0], (*b.Tokens)[1:]...)
+}
