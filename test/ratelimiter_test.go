@@ -8,21 +8,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetTokenFromBucket(t *testing.T) {
+func TestAllowFromBucket(t *testing.T) {
 
 	rl := internal.NewRateLimiter(10, 0)
 	for i := 0; i < 3; i++ {
-		rl.GetToken()
+		rl.Allow()
 	}
 	var size int = rl.GetBucketSize()
 	assert.Equal(t, 7, size)
 }
 
-func TestGetTokenThrowFalse(t *testing.T) {
+func TestAllowThrowFalse(t *testing.T) {
 	rl := internal.NewRateLimiter(3, 0)
 	var expected bool
 	for i := 0; i <= 3; i++ {
-		expected = rl.GetToken()
+		expected = rl.Allow()
 	}
 	assert.Equal(t, false, expected)
 }
@@ -31,7 +31,7 @@ func TestFillBucket(t *testing.T) {
 	rl := internal.NewRateLimiter(3, 0)
 	var expected bool
 	for i := 0; i <= 3; i++ {
-		expected = rl.GetToken()
+		expected = rl.Allow()
 	}
 
 	if !expected {
@@ -45,9 +45,9 @@ func TestFillBucket(t *testing.T) {
 func TestScheduleLimiterToFillBucket(t *testing.T) {
 
 	rl := internal.NewRateLimiter(3, 5)
-	rl.Start()
+
 	for i := 0; i <= 3; i++ {
-		rl.GetToken()
+		rl.Allow()
 	}
 	wait := time.NewTimer(500 * time.Millisecond)
 	<-wait.C
