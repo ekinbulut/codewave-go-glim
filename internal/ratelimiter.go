@@ -6,7 +6,7 @@ type RateLimiter struct {
 }
 
 func NewRateLimiter(capacity int, rate int) *RateLimiter {
-	sch := NewSchedular(rate)
+	sch := newSchedular(rate)
 	rt := &RateLimiter{
 		bucket:    NewBucket(capacity),
 		schedular: sch,
@@ -17,7 +17,7 @@ func NewRateLimiter(capacity int, rate int) *RateLimiter {
 
 func (rl *RateLimiter) Allow() bool {
 
-	if rl.bucket.Size() > 0 {
+	if rl.GetBucketSize() > 0 {
 		rl.bucket.RemoveOne()
 		return true
 	}

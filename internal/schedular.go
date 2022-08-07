@@ -8,7 +8,7 @@ type schedular struct {
 	ticker *time.Ticker
 }
 
-func NewSchedular(s int) *schedular {
+func newSchedular(s int) *schedular {
 	return &schedular{
 		second: s,
 		done:   make(chan bool),
