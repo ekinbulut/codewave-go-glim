@@ -20,7 +20,7 @@ func TestGetTokenFromBucket(t *testing.T) {
 func TestGetTokenThrowFalse(t *testing.T) {
 	rl := internal.NewRateLimiter(3)
 	var expected bool
-	for i := 0; i < 3; i++ {
+	for i := 0; i <= 3; i++ {
 		expected = rl.GetToken()
 	}
 	assert.Equal(t, false, expected)

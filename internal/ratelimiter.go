@@ -10,8 +10,13 @@ func NewRateLimiter(bs int) *RateLimiter {
 	}
 }
 
-func (rl *RateLimiter) GetToken() {
-	rl.Bucket.RemoveOne()
+func (rl *RateLimiter) GetToken() bool {
+
+	if rl.Bucket.Size() > 0 {
+		rl.Bucket.RemoveOne()
+		return true
+	}
+	return false
 }
 
 func (rl *RateLimiter) GetBucketSize() (size int) {
