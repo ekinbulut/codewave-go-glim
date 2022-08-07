@@ -9,7 +9,7 @@ import (
 
 func TestGetTokenFromBucket(t *testing.T) {
 
-	rl := NewRateLimiter(10)
+	rl := internal.NewRateLimiter(10)
 	for i := 0; i < 3; i++ {
 		rl.GetToken()
 	}
@@ -17,20 +17,11 @@ func TestGetTokenFromBucket(t *testing.T) {
 	assert.Equal(t, 7, size)
 }
 
-type RateLimiter struct {
-	Bucket *internal.Bucket
-}
-
-func NewRateLimiter(bs int) *RateLimiter {
-	return &RateLimiter{
-		Bucket: internal.NewBucket(bs),
+func TestGetTokenThrowFalse(t *testing.T) {
+	rl := internal.NewRateLimiter(3)
+	var expected bool
+	for i := 0; i < 3; i++ {
+		expected = rl.GetToken()
 	}
-}
-
-func (rl *RateLimiter) GetToken() {
-	rl.Bucket.RemoveOne()
-}
-
-func (rl *RateLimiter) GetBucketSize() (size int) {
-	return rl.Bucket.Size()
+	assert.Equal(t, false, expected)
 }
