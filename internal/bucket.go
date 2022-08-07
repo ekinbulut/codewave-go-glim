@@ -31,6 +31,17 @@ func (b *Bucket) RemoveOne() {
 
 func (b *Bucket) Fill() {
 	tokens := make([]Token, b.quote)
+
+	remaing := len(tokens) - b.Size()
+
+	if remaing == 0 {
+		return
+	} else {
+		for i := 0; i < remaing; i++ {
+			tokens = make([]Token, remaing)
+		}
+	}
+
 	for _, t := range tokens {
 		b.Add(t)
 	}

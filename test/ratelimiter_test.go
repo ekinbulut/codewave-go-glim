@@ -10,7 +10,7 @@ import (
 
 func TestGetTokenFromBucket(t *testing.T) {
 
-	rl := internal.NewRateLimiter(10)
+	rl := internal.NewRateLimiter(10, 0)
 	for i := 0; i < 3; i++ {
 		rl.GetToken()
 	}
@@ -19,7 +19,7 @@ func TestGetTokenFromBucket(t *testing.T) {
 }
 
 func TestGetTokenThrowFalse(t *testing.T) {
-	rl := internal.NewRateLimiter(3)
+	rl := internal.NewRateLimiter(3, 0)
 	var expected bool
 	for i := 0; i <= 3; i++ {
 		expected = rl.GetToken()
@@ -28,7 +28,7 @@ func TestGetTokenThrowFalse(t *testing.T) {
 }
 
 func TestFillBucket(t *testing.T) {
-	rl := internal.NewRateLimiter(3)
+	rl := internal.NewRateLimiter(3, 0)
 	var expected bool
 	for i := 0; i <= 3; i++ {
 		expected = rl.GetToken()
@@ -42,17 +42,19 @@ func TestFillBucket(t *testing.T) {
 
 }
 
-func TestScheduleLimiterToFillBucket(t *testing.T){
-	
+func TestScheduleLimiterToFillBucket(t *testing.T) {
+
 	rl := internal.NewRateLimiter(3, 5)
+	rl.Start()
 	for i := 0; i <= 3; i++ {
 		rl.GetToken()
 	}
-	wait := time.NewTimer(5 * time.Second)
+	wait := time.NewTimer(500 * time.Millisecond)
+	<-wait.C
 
-	go func() {
-		<- wait.C
-	}()
+	// sleep for 10 seconds
+	time.Sleep(6 * time.Second)
+	rl.Stop()
 
 	assert.Equal(t, 3, rl.GetBucketSize())
 
