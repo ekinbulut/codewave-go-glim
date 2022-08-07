@@ -22,3 +22,7 @@ func (rl *RateLimiter) GetToken() bool {
 func (rl *RateLimiter) GetBucketSize() (size int) {
 	return rl.Bucket.Size()
 }
+
+func (rl *RateLimiter) FillBucket() {
+	rl.Bucket.Fill()
+}
