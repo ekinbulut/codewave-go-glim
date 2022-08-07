@@ -20,6 +20,7 @@ func NewRateLimiter(bs int, s int) *RateLimiter {
 	}
 }
 
+// change name to Allow
 func (rl *RateLimiter) GetToken() bool {
 
 	if rl.bucket.Size() > 0 {
