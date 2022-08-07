@@ -1,27 +1,21 @@
 package internal
 
-import (
-	"time"
-)
-
 type RateLimiter struct {
-	bucket *Bucket
-	second int
-	done   chan bool
-	ticker *time.Ticker
+	bucket    *Bucket
+	schedular *schedular
 }
 
-func NewRateLimiter(bs int, s int) *RateLimiter {
-	return &RateLimiter{
-		bucket: NewBucket(bs),
-		second: s,
-		done:   make(chan bool),
-		ticker: nil,
+func NewRateLimiter(capacity int, rate int) *RateLimiter {
+	sch := NewSchedular(rate)
+	rt := &RateLimiter{
+		bucket:    NewBucket(capacity),
+		schedular: sch,
 	}
+	sch.Start(rt.FillBucket)
+	return rt
 }
 
-// change name to Allow
-func (rl *RateLimiter) GetToken() bool {
+func (rl *RateLimiter) Allow() bool {
 
 	if rl.bucket.Size() > 0 {
 		rl.bucket.RemoveOne()
@@ -38,32 +32,6 @@ func (rl *RateLimiter) FillBucket() {
 	rl.bucket.Fill()
 }
 
-func (rl *RateLimiter) Start() {
-
-	if rl.second == 0 {
-		return
-	}
-
-	// confugure ticker for every given second
-	rl.ticker = time.NewTicker(time.Duration(rl.second) * time.Second)
-
-	go func() {
-		for {
-			select {
-			case <-rl.done:
-				return
-			case <-rl.ticker.C:
-				rl.FillBucket()
-			}
-		}
-	}()
-}
-
 func (rl *RateLimiter) Stop() {
-
-	if rl.ticker != nil {
-		rl.ticker.Stop()
-		rl.done <- true
-	}
-
+	rl.schedular.Stop()
 }

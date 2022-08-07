@@ -2,18 +2,15 @@ package internal
 
 type Bucket struct {
 	Tokens *[]Token
-	quote  int
+	rate   int
 }
 
-func NewBucket(quote int) *Bucket {
-
-	tokens := make([]Token, quote)
-
+func NewBucket(rate int) *Bucket {
+	tokens := make([]Token, rate)
 	return &Bucket{
-		quote:  quote,
+		rate:   rate,
 		Tokens: &tokens,
 	}
-
 }
 
 func (b *Bucket) Size() int {
@@ -30,10 +27,8 @@ func (b *Bucket) RemoveOne() {
 }
 
 func (b *Bucket) Fill() {
-	tokens := make([]Token, b.quote)
-
+	tokens := make([]Token, b.rate)
 	remaing := len(tokens) - b.Size()
-
 	if remaing == 0 {
 		return
 	} else {
@@ -41,7 +36,6 @@ func (b *Bucket) Fill() {
 			tokens = make([]Token, remaing)
 		}
 	}
-
 	for _, t := range tokens {
 		b.Add(t)
 	}

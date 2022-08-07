@@ -26,10 +26,10 @@ import (
 
 func main() {
     // gets two parameters: `capacity` and `rate`
-    limiter := glim.NewRateLimiter(10, time.Second)
-    limiter.Start()
+    limiter := glim.NewRateLimiter(100, time.Second)
+
     for i := 0; i < 10; i++ {
-        if limiter.GetToken() {
+        if limiter.Allow() {
             // do something
         }
     }
