@@ -25,3 +25,18 @@ func TestGetTokenThrowFalse(t *testing.T) {
 	}
 	assert.Equal(t, false, expected)
 }
+
+func TestFillBucket(t *testing.T) {
+	rl := internal.NewRateLimiter(3)
+	var expected bool
+	for i := 0; i <= 3; i++ {
+		expected = rl.GetToken()
+	}
+
+	if !expected {
+		rl.FillBucket()
+	}
+
+	assert.Equal(t, 3, rl.GetBucketSize())
+
+}
