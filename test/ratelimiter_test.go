@@ -3,6 +3,7 @@ package test
 import (
 	"glim/internal"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -36,6 +37,22 @@ func TestFillBucket(t *testing.T) {
 	if !expected {
 		rl.FillBucket()
 	}
+
+	assert.Equal(t, 3, rl.GetBucketSize())
+
+}
+
+func TestScheduleLimiterToFillBucket(t *testing.T){
+	
+	rl := internal.NewRateLimiter(3, 5)
+	for i := 0; i <= 3; i++ {
+		rl.GetToken()
+	}
+	wait := time.NewTimer(5 * time.Second)
+
+	go func() {
+		<- wait.C
+	}()
 
 	assert.Equal(t, 3, rl.GetBucketSize())
 
