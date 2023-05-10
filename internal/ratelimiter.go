@@ -77,6 +77,6 @@ func (rl *RateLimiter) Allow() bool {
 }
 
 func (rl *RateLimiter) Config() string {
-	config := fmt.Sprintf("Capacity: %d\nRate per second: %d\nAlgorithm: %s\n", rl.capacity, rl.ratePerSecond, string(rl.algorithm))
+	config := fmt.Sprintf("Capacity: %d\nRate per second: %d\nAlgorithm: %s\nRefill interval: %d ns", rl.capacity, rl.ratePerSecond, string(rune(rl.algorithm)), rl.refillInterval)
 	return config
 }

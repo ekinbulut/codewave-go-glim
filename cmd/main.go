@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	limiter := internal.NewRateLimiter(10, 10, 1)
+	limiter := internal.NewRateLimiter(5, 250000000, 1)
 	config := limiter.Config()
 	fmt.Println(config)
 
