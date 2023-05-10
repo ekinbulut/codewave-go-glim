@@ -1,15 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"glim/internal"
 	"log"
 	"time"
 )
 
 func main() {
-	println("Hello, world!")
 
-	limiter := internal.NewRateLimiter(5, 5)
+	limiter := internal.NewRateLimiter(5, 250000000, 1)
+	config := limiter.Config()
+	fmt.Println(config)
 
 	// call Allow() 3 times
 	for i := 0; i < 100; i++ {
@@ -22,7 +24,5 @@ func main() {
 			time.Sleep(1 * time.Second)
 		}
 	}
-
-	limiter.Stop()
 
 }
